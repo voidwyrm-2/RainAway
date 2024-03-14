@@ -11,12 +11,14 @@ sealed class Options : OptionInterface
     public static Configurable<bool> EnableStatusLabel;
     public static Configurable<float> StatusLabelX;
     public static Configurable<float> StatusLabelY;
+    public static Configurable<float> StatusLabelScale;
 
     public Options()
     {
-        EnableStatusLabel = config.Bind("nc.cfgEnableStatusLabel", true);
-        StatusLabelX = config.Bind("nc.cfgStatusLabelX", 20.01f, new ConfigAcceptableRange<float>(0, 1000));
-        StatusLabelY = config.Bind("nc.cfgStatusLabelY", 45f, new ConfigAcceptableRange<float>(0, 1000));
+        EnableStatusLabel = config.Bind("nc_cfgEnableStatusLabel", true);
+        StatusLabelX = config.Bind("nc_cfgStatusLabelX", 20.01f, new ConfigAcceptableRange<float>(0, 1000));
+        StatusLabelY = config.Bind("nc_cfgStatusLabelY", 45f, new ConfigAcceptableRange<float>(0, 1000));
+        StatusLabelScale = config.Bind("nc_cfgStatusLabelScale", 0.75f, new ConfigAcceptableRange<float>(0, 1));
     }
 
     public override void Initialize()
@@ -28,24 +30,38 @@ sealed class Options : OptionInterface
         var labelTitle = new OpLabel(20, 600 - 30, "Rain Away! Options", true);
 
         var top = 200;
-        var labelDmgMul = new OpLabel(new(20, 600 - top), Vector2.zero, "Status Label Enabled?", FLabelAlignment.Left);
-        var draggerDmgMul = new OpCheckBox(EnableStatusLabel, new Vector2(180, 600 - top - 6)) {
+        var labelSTE = new OpLabel(new(20, 600 - top), Vector2.zero, "Status label enabled?", FLabelAlignment.Left);
+        var checkEST = new OpCheckBox(EnableStatusLabel, new Vector2(180, 600 - top - 6)) {
             description = "Turns on or off the \"Rain Away is currently enable/disabled\" message on the pause menu",
         };
 
-        var labelDmgRegen = new OpLabel(new(20, 600 - top - 40), Vector2.zero, "Recovery cooldown", FLabelAlignment.Left);
-        var labelSLX = new OpLabel(new(516, 600 - top - 40), Vector2.zero, "position of the label on the horizontal", FLabelAlignment.Left);
-        var floatsliderSLX = new OpSlider(StatusLabelX, new Vector2(180, 600 - top - 46), 320) {
-            description = "After this delay, you rapidly recover from damage. If set to -1, damage is only reset after sleeping.",
+        var labelSLX = new OpLabel(new(20, 600 - top - 40), Vector2.zero, "Status label X position", FLabelAlignment.Left);
+        var floatsliderSLX = new OpFloatSlider(StatusLabelX, new Vector2(180, 600 - top - 46), 320) {
+            description = "Position of the label on the horizontal",
+        };
+
+        var labelSLY = new OpLabel(new(20, 600 - top - 80), Vector2.zero, "Status label Y position", FLabelAlignment.Left);
+        var floatsliderSLY = new OpFloatSlider(StatusLabelX, new Vector2(180, 600 - top - 46), 320)
+        {
+            description = "Position of the label on the vertical",
+        };
+
+        var labelSLS = new OpLabel(new(20, 600 - top - 80), Vector2.zero, "Status label scale factor", FLabelAlignment.Left);
+        var floatsliderSLS = new OpFloatSlider(StatusLabelScale, new Vector2(180, 600 - top - 46), 320)
+        {
+            description = "Scale of the label",
         };
 
         Tabs[0].AddItems(
-            labelTitle,
-            labelDmgMul,
-            draggerDmgMul,
-            labelDmgRegen,
-            labelSLX,
-            floatsliderSLX
+            labelTitle, // Title, simple as that
+            labelSTE, // Status Label Enabled
+            checkEST, // EnablecStatuscLabel
+            labelSLX, // Status Label X
+            floatsliderSLX, // Status Label X
+            labelSLY, // Status Label Y
+            floatsliderSLY, // Status Label Y
+            labelSLS, // Status Label Scale
+            floatsliderSLS // Status Label Scale
         );
     }
 }

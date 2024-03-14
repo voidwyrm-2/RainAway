@@ -30,7 +30,7 @@ namespace NuclearPasta.RainAway
 			RainAwayStateLabel.label.color = Menu.Menu.MenuRGB(Menu.Menu.MenuColors.MediumGrey);
 			RainAwayStateLabel.label.alignment = FLabelAlignment.Right; // Align on the right so that longer song names don't go off the screen.
 			RainAwayStateLabel.label.alpha = 0f; // Start out invisible in order to fade in.
-            RainAwayStateLabel.label.scale = 0.75f;
+            RainAwayStateLabel.label.scale = Options.StatusLabelScale.Value;
 
 
             self.pages[0].subObjects.Add(RainAwayStateLabel);

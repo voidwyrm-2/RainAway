@@ -27,6 +27,8 @@ namespace NuclearPasta.RainAway
 
         public static bool isInit;
 
+        public static bool showLabel = Options.EnableStatusLabel.Value;
+
         // Add hooks
         public void OnEnable()
         {
@@ -45,7 +47,7 @@ namespace NuclearPasta.RainAway
             On.GlobalRain.Update += GlobalRain_Update;
             On.RainWorld.OnModsInit += RainWorld_LoadOptions;
             On.RainWorld.OnModsInit += RainWorld_OnModsInit;
-            PauseMenuText.SetupHooks();
+            if (showLabel) PauseMenuText.SetupHooks();
         }
 
         private void RainWorld_LoadOptions(On.RainWorld.orig_OnModsInit orig, RainWorld self)
