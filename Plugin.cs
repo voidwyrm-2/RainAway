@@ -7,7 +7,7 @@ namespace NuclearPasta.RainAway
 {
     [BepInDependency("com.dual.improved-input-config", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin("nc.rainaway", "Rain Away!", "1.0.0")]
-    class Plugin : BaseUnityPlugin
+    public class Plugin : BaseUnityPlugin
     {
 
         public static bool debug = true;
@@ -43,8 +43,16 @@ namespace NuclearPasta.RainAway
             //On.World.ctor += World_ctor;
             On.Player.Update += Player_Update;
             On.GlobalRain.Update += GlobalRain_Update;
+            On.RainWorld.OnModsInit += RainWorld_LoadOptions;
             On.RainWorld.OnModsInit += RainWorld_OnModsInit;
-            
+            PauseMenuText.SetupHooks();
+        }
+
+        private void RainWorld_LoadOptions(On.RainWorld.orig_OnModsInit orig, RainWorld self)
+        {
+            orig(self);
+
+            MachineConnector.SetRegisteredOI("nc.rainaway", new Options());
         }
 
         private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
@@ -69,17 +77,8 @@ namespace NuclearPasta.RainAway
 
         private void RainWorld_PostModsInit(On.RainWorld.orig_PostModsInit orig, RainWorld self)
         {
-            ImprovedInputEnabled = ModManager.ActiveMods.Exists((ModManager.Mod mod) => mod.id == "improved-input-config");
+            ImprovedInputEnabled = ModManager.ActiveMods.Exists((ModManager.Mod mod) => mod.id == "com.dual.improved-input-config");
             if (!ImprovedInputEnabled)
-            {
-                ImprovedInputEnabled = ModManager.ActiveMods.Exists((ModManager.Mod mod) => mod.id == "com.dual.improved-input-config");
-                Logger.LogDebug("no mod with id \"improved-input-config\"\" found, trying \"com.dual.improved-input-config\" instead...");
-            }
-            if (ImprovedInputEnabled)
-            {
-                Logger.LogDebug("mod with id \"com.dual.improved-input-config\" found, continuing as normal");
-            }
-            else
             {
                 Logger.LogDebug("no mod with id \"com.dual.improved-input-config\" found, continuing without");
             }
