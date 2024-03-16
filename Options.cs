@@ -41,13 +41,13 @@ sealed class Options : OptionInterface
         };
 
         var labelSLY = new OpLabel(new(20, 600 - top - 80), Vector2.zero, "Status label Y position", FLabelAlignment.Left);
-        var floatsliderSLY = new OpFloatSlider(StatusLabelX, new Vector2(180, 600 - top - 46), 320)
+        var floatsliderSLY = new OpFloatSlider(StatusLabelY, new Vector2(180, 600 - top - 86), 320)
         {
             description = "Position of the label on the vertical",
         };
 
-        var labelSLS = new OpLabel(new(20, 600 - top - 80), Vector2.zero, "Status label scale factor", FLabelAlignment.Left);
-        var floatsliderSLS = new OpFloatSlider(StatusLabelScale, new Vector2(180, 600 - top - 46), 320)
+        var labelSLS = new OpLabel(new(20, 600 - top - 120), Vector2.zero, "Status label scale factor", FLabelAlignment.Left);
+        var floatsliderSLS = new OpFloatSlider(StatusLabelScale, new Vector2(180, 600 - top - 126), 320)
         {
             description = "Scale of the label",
         };

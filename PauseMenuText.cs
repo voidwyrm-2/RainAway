@@ -23,8 +23,10 @@ namespace NuclearPasta.RainAway
 		{
 			orig(self, manager, game);
 
-			float posX = game.rainWorld.options.ScreenSize.x - Options.StatusLabelX.Value;
-			float posY = game.rainWorld.options.ScreenSize.y - Options.StatusLabelY.Value;
+
+
+			float posX = game.rainWorld.options.ScreenSize.x - Plugin.labelXY[0];
+			float posY = game.rainWorld.options.ScreenSize.y - Plugin.labelXY[1];
 
 			RainAwayStateLabel = new MenuLabel(self, self.pages[0], $"Rain Away is currently {Plugin.status}", new Vector2(posX, posY), Vector2.zero, true);
 			RainAwayStateLabel.label.color = Menu.Menu.MenuRGB(Menu.Menu.MenuColors.MediumGrey);

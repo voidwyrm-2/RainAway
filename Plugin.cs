@@ -10,25 +10,27 @@ namespace NuclearPasta.RainAway
     public class Plugin : BaseUnityPlugin
     {
 
-        public static bool debug = true;
+        public static bool debug = false;
 
         public static bool isenabled = true;
         public static string status = "enabled";
 
-        public static bool isStory = false;
+        public static bool isStory = false; // is this a story game
         public static int cycleLength = 0;
         public static int cycleLimit = 0;
-        public static float cCycleTime = 0;
-        public static bool reset = false;
+        public static float cCycleTime = 0; // current cycle time
+        public static bool reset = false; // should reset cycle to beginning?
 
-        public static PlayerKeybind ToggleRainAway;
+        public static PlayerKeybind ToggleRainAway; // improved input config keybinding
 
-        public static bool ImprovedInputEnabled;
+        public static bool ImprovedInputEnabled; // is improved input config enabled?
 
         public static bool isInit;
 
-        public static bool showLabel = Options.EnableStatusLabel.Value;
+        public static bool showLabel; // can show Rain Away status label
 
+        public static float[] labelXY = new float[2];
+            
         // Add hooks
         public void OnEnable()
         {
@@ -47,7 +49,9 @@ namespace NuclearPasta.RainAway
             On.GlobalRain.Update += GlobalRain_Update;
             On.RainWorld.OnModsInit += RainWorld_LoadOptions;
             On.RainWorld.OnModsInit += RainWorld_OnModsInit;
-            if (showLabel) PauseMenuText.SetupHooks();
+            labelXY[0] = Options.StatusLabelX.Value;
+            labelXY[1] = Options.StatusLabelY.Value;
+            PauseMenuText.SetupHooks();
         }
 
         private void RainWorld_LoadOptions(On.RainWorld.orig_OnModsInit orig, RainWorld self)
@@ -79,17 +83,18 @@ namespace NuclearPasta.RainAway
 
         private void RainWorld_PostModsInit(On.RainWorld.orig_PostModsInit orig, RainWorld self)
         {
-            ImprovedInputEnabled = ModManager.ActiveMods.Exists((ModManager.Mod mod) => mod.id == "com.dual.improved-input-config");
+            ImprovedInputEnabled = ModManager.ActiveMods.Exists((ModManager.Mod mod) => mod.id == "improved-input-config"); // checking if improved input config is enabled
             if (!ImprovedInputEnabled)
             {
-                Logger.LogDebug("no mod with id \"com.dual.improved-input-config\" found, continuing without");
+                Logger.LogDebug("no mod with id \"improved-input-config\" found, continuing without");
             }
+            showLabel = Options.EnableStatusLabel.Value;
             orig(self);
         }
 
         private void GlobalRain_Update(On.GlobalRain.orig_Update orig, GlobalRain self)
         {
-            if (reset) self.ResetRain(); reset = false;
+            if (reset) self.ResetRain(); reset = false; // reset rain timer completely
             orig(self);
         }
 
